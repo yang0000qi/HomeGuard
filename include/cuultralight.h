@@ -1,4 +1,4 @@
-
+﻿
 
 #ifndef CUULIGHT
 #define CUULIGHT
@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 class cuu_exception : public std::exception
 {

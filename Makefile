@@ -1,8 +1,8 @@
 CXX =  $(shell which /usr/bin/clang++ 2>/dev/null || which g++)
 CXXFLAGS = -I./include -I../include -std=c++11 -Wall -g
 
-TARGET = Solution
-TEST_TARGET = testSolution
+TARGET = HomeGuard
+TEST_TARGET = testHomeGuard
 
 SOURCES = $(wildcard ./src/*.cpp)
 OBJECTS = $(patsubst %.cpp,%.o,$(SOURCES))
