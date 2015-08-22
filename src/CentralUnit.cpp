@@ -104,7 +104,7 @@ std::tuple<std::string, std::string> CentralUnit::_parsePacket(const std::string
 {
     std::string id;
     std::string status;
-    
+
     // parse the packet
     size_t splitPosition = packet.find(',');
     if (splitPosition != std::string::npos) {
@@ -128,25 +128,19 @@ void CentralUnit::parseRadioBroadcast(const std::string& packet)
     std::tie(id, status) = _parsePacket(packet);
 
     // find sensor with id
-    Sensor *sensor = 0;
-    for(std::vector<Sensor>::iterator it = sensors.begin(); it != sensors.end(); ++it) {
-        if (it->getID() == id) {
-            sensor = &(*it);
-            break;
-        }
-    }
+    Sensor sensor = getSensor(id);
 
     //trip or reset sensor
-    if(sensor != 0) {
+    if (sensor.getID() != "-1") {
         if("TRIPPED" == status) {
-            sensor->trip();
+            sensor.trip();
         } else {
-            sensor->reset();
+            sensor.reset();
         }
     }
 
     //get the message from the sensor and display it
-    std::string message = getSensorMessage(*sensor);
+    std::string message = getSensorMessage(sensor);
     view->showMessage(message);
 
     // sound the alarm if armed
