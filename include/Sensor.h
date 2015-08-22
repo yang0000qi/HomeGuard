@@ -23,6 +23,7 @@ struct SensorStatus {
     static const std::string FAIL;
     static const std::string PENDING;
     static const std::string READY;
+    static const std::string TRIPPED;
 };
 
 class Sensor {

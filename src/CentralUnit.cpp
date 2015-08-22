@@ -128,7 +128,7 @@ void CentralUnit::_terminateSensorTest()
     _sensorTestStatus = SensorStatus::PASS;
     for (auto statusMap : _sensorStatusMap) {
         std::string status = statusMap.second;
-        if (status == SensorStatus::PENDING) {
+        if (SensorStatus::PENDING == status) {
             _sensorTestStatus = SensorStatus::FAIL;
             break;
         }
@@ -138,7 +138,7 @@ void CentralUnit::_terminateSensorTest()
 void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
 {
     if (_runningSensorTest) {
-        if ("TRIPPED" == status) {
+        if (SensorStatus::TRIPPED == status) {
             _sensorStatusMap[id] = SensorStatus::PASS;
         }
 

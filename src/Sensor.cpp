@@ -1,10 +1,11 @@
 ﻿#include "Sensor.h"
 
 
-const std::string SensorStatus::PASS = "PASS";
-const std::string SensorStatus::FAIL = "FAIL";
+const std::string SensorStatus::PASS    = "PASS";
+const std::string SensorStatus::FAIL    = "FAIL";
 const std::string SensorStatus::PENDING = "PENDING";
-const std::string SensorStatus::READY = "READY";
+const std::string SensorStatus::READY   = "READY";
+const std::string SensorStatus::TRIPPED = "TRIPPED";
 
 #define MESSAGE_MAP(type, tripped, normal)              \
     _messageMap[(type)] = {[&]() { return (tripped); }, \
@@ -77,7 +78,7 @@ void Sensor::reset()
 void Sensor::triggerByStatus(const std::string status)
 {
     if (getID() != InvalidId) {
-        if ("TRIPPED" == status) {
+        if (SensorStatus::TRIPPED == status) {
             trip();
         } else {
             reset();

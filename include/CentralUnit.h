@@ -27,13 +27,14 @@ public:
     void setSecurityCode(const std::string& code);
     void enterCode(const std::string& code);
 
-    SensorList& getSensors();
     SensorStatusMap& getSensorStatusMap();
+    SensorList& getSensors();
+    Sensor getSensor(const std::string& id) const;
+    std::string getSensorStatus() const;
+
     void registerSensor(const Sensor& sensor);
     void onRadioBroadcast(const std::string& packet);
     void runSensorTestPrepare();
-    Sensor getSensor(const std::string& id) const;
-    std::string getSensorStatus() const;
 
 private:
     void _sensorTest(const std::string& id, const std::string& status);

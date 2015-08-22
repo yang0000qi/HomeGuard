@@ -62,5 +62,24 @@ TEST_CASE("test get sensor message", "[Sensor,unit]") {
 }
 
 TEST_CASE("run sensor test", "[Sensor,unit]") {
-    // TODO!!
+    CentralUnit cu;
+    Sensor s1("1", "door", SensorType::DOOR);
+    Sensor s2("2", "window", SensorType::WINDOW);
+
+    cu.registerSensor(s1);
+    cu.runSensorTestPrepare();
+    cu.onRadioBroadcast("1,NOT_TRIPPED");
+    CHECK(cu.getSensorStatus() == SensorStatus::PENDING);
+    cu.onRadioBroadcast("1,TRIPPED");
+    CHECK(cu.getSensorStatus() == SensorStatus::PASS);
+
+    s1.reset();
+    cu.registerSensor(s2);
+    cu.runSensorTestPrepare();
+    cu.onRadioBroadcast("1,NOT_TRIPPED");
+    cu.onRadioBroadcast("2,NOT_TRIPPED");
+    CHECK(cu.getSensorStatus() == SensorStatus::PENDING);
+    cu.onRadioBroadcast("1,TRIPPED");
+    cu.onRadioBroadcast("2,TRIPPED");
+    CHECK(cu.getSensorStatus() == SensorStatus::PASS);
 }
