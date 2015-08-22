@@ -1,6 +1,10 @@
 ﻿#include "Sensor.h"
 
 
+#define MESSAGE_MAP(type, tripped, normal) \
+    _messageMap[(type)] = {[&]() { return (tripped); },\
+                           [&]() { return (normal); }}
+
 Sensor::Sensor(const std::string& id,
                const std::string& location,
                SensorType type)
@@ -14,25 +18,25 @@ Sensor::Sensor(const std::string& id,
 
 void Sensor::_initSensorMessageMap()
 {
-    _messageMap[SensorType::DOOR] =
-        {[&]() { return _location + " is open"; },
-         [&]() { return _location + " is closed"; }};
+    MESSAGE_MAP(SensorType::DOOR,
+                _location + " is open",
+                _location + " is closed");
 
-    _messageMap[SensorType::WINDOW] = {
-        [&]() { return _location + " is ajar";  },
-        [&]() { return _location + " is sealed"; }};
+    MESSAGE_MAP(SensorType::WINDOW,
+                _location + " is ajar",
+                _location + " is sealed");
 
-    _messageMap[SensorType::MOTION] = {
-        [&]() { return "Motion detected in " + _location; },
-        [&]() { return _location + " is motionless";}};
+    MESSAGE_MAP(SensorType::MOTION,
+                "Motion detected in " + _location,
+                _location + " is motionless");
 
-    _messageMap[SensorType::FIRE] = {
-        [&]() {return _location + " is on FIRE!"; },
-        [&]() {return _location + " temperature is normal"; }};
+    MESSAGE_MAP(SensorType::FIRE,
+                _location + " is on FIRE!",
+                _location + " temperature is normal");
 
-    _messageMap[SensorType::NONE] = {
-        [&]() { return "default"; },
-        [&]() { return "default"; }};
+    MESSAGE_MAP(SensorType::NONE,
+                "default",
+                "default");
 }
 
 std::string Sensor::getID() const
