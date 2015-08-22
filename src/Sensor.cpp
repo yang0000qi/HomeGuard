@@ -4,46 +4,46 @@
 Sensor::Sensor(const std::string& id,
                const std::string& location,
                SensorType type)
-    : id(id)
-    , location(location)
-    , type(type)
-    , tripped(false)
+    : _id(id)
+    , _location(location)
+    , _type(type)
+    , _tripped(false)
 {}
 
 
 std::string Sensor::getID() const
 {
-    return id;
+    return _id;
 }
 
 std::string Sensor::getLocation() const
 {
-    return location;
+    return _location;
 }
 
 SensorType Sensor::getType() const
 {
-    return type;
+    return _type;
 }
 
 bool Sensor::isTripped() const
 {
-    return tripped;
+    return _tripped;
 }
 
 void Sensor::trip()
 {
-    tripped = true;
+    _tripped = true;
 }
 
 void Sensor::reset()
 {
-    tripped = false;
+    _tripped = false;
 }
 
 void Sensor::triggerByStatus(const std::string status)
 {
-    if (id != InvalidId) {
+    if (_id != InvalidId) {
         if ("TRIPPED" == status) {
             trip();
         } else {
@@ -56,24 +56,24 @@ void Sensor::triggerByStatus(const std::string status)
 std::string Sensor::getMessage() const
 {
     std::string message = "default";
-    if (tripped) {
-        if (SensorType::DOOR == type)
-            message = location + " is open";
-        else if (SensorType::WINDOW == type)
-            message = location + " is ajar";
-        else if (SensorType::MOTION == type)
-            message = "Motion detected in " + location;
-        else if (SensorType::FIRE == type)
-            message = location + " is on FIRE!";
+    if (isTripped()) {
+        if (SensorType::DOOR == _type)
+            message = _location + " is open";
+        else if (SensorType::WINDOW == _type)
+            message = _location + " is ajar";
+        else if (SensorType::MOTION == _type)
+            message = "Motion detected in " + _location;
+        else if (SensorType::FIRE == _type)
+            message = _location + " is on FIRE!";
     } else {
-        if (SensorType::DOOR == type)
-            message = location + " is closed";
-        else if (SensorType::WINDOW == type)
-            message = location + " is sealed";
-        else if (SensorType::MOTION == type)
-            message = location + " is motionless";
-        else if (SensorType::FIRE == type)
-            message = location + " temperature is normal";
+        if (SensorType::DOOR == _type)
+            message = _location + " is closed";
+        else if (SensorType::WINDOW == _type)
+            message = _location + " is sealed";
+        else if (SensorType::MOTION == _type)
+            message = _location + " is motionless";
+        else if (SensorType::FIRE == _type)
+            message = _location + " temperature is normal";
     }
     return message;
 }

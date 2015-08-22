@@ -34,8 +34,8 @@ public:
     std::string getMessage() const;
 
 private:
-    std::string id;
-    std::string location;
-    SensorType type;
-    bool tripped;
+    std::string _id;
+    std::string _location;
+    SensorType _type;
+    bool _tripped;
 };
