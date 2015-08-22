@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include <map>
 #include <memory>
 #include <string>
@@ -10,6 +9,7 @@
 #include "AudibleAlarm.h"
 #include "HomeguardView.h"
 #include "Sensor.h"
+
 
 typedef std::map<std::string, std::string> SensorStatusMap;
 typedef std::tuple<std::string, std::string> PacketTulpe;

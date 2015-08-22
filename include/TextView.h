@@ -1,7 +1,7 @@
-﻿
-#pragma once
+﻿#pragma once
 
 #include "HomeguardView.h"
+
 
 class TextView : public HomeguardView
 {

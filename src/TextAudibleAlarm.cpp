@@ -1,6 +1,5 @@
-﻿
+﻿#include "TextAudibleAlarm.h"
 
-#include "TextAudibleAlarm.h"
 
 void TextAudibleAlarm::sound()
 {

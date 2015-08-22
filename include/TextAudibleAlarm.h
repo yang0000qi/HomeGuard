@@ -1,7 +1,7 @@
-﻿
-#pragma once
+﻿#pragma once
 
 #include "AudibleAlarm.h"
+
 
 class TextAudibleAlarm : public AudibleAlarm
 {

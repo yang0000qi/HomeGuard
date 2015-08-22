@@ -1,8 +1,6 @@
-﻿
+﻿#include <iostream>
 
 #include "TextView.h"
-
-#include <iostream>
 
 
 void TextView::showMessage(const std::string& message)

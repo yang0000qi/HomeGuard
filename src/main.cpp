@@ -1,6 +1,7 @@
 ﻿#include "Sensor.h"
 #include "CentralUnit.h"
 
+
 int main(int argc, char *argv[])
 {
     CentralUnit cu;
