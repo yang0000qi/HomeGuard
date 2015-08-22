@@ -1,22 +1,31 @@
 ﻿#pragma once
 
+#include <map>
 #include <string>
 
 
 static const std::string InvalidId = "-1";
 
-class Sensor
-{
-public:
-    enum Type { DOOR, WINDOW, MOTION, FIRE, NONE };
+struct SensorMessage {
+    std::function<std::string(std::string)> tripped;
+    std::function<std::string(std::string)> normal;
+};
 
+enum class SensorType {
+    DOOR, WINDOW, MOTION, FIRE, NONE
+};
+
+typedef std::map<SensorType, SensorMessage> SensorMessageMap;
+
+class Sensor {
+public:
     Sensor(const std::string& id,
            const std::string& location,
-           Type type);
+           SensorType type);
 
     std::string getID () const;
     std::string getLocation() const;
-    Type getType() const;
+    SensorType getType() const;
 
     bool isTripped() const;
     void trip();
@@ -27,6 +36,6 @@ public:
 private:
     std::string id;
     std::string location;
-    Type type;
+    SensorType type;
     bool tripped;
 };

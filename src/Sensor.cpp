@@ -3,7 +3,7 @@
 
 Sensor::Sensor(const std::string& id,
                const std::string& location,
-               Type type)
+               SensorType type)
     : id(id)
     , location(location)
     , type(type)
@@ -21,7 +21,7 @@ std::string Sensor::getLocation() const
     return location;
 }
 
-Sensor::Type Sensor::getType() const
+SensorType Sensor::getType() const
 {
     return type;
 }
@@ -57,22 +57,22 @@ std::string Sensor::getMessage() const
 {
     std::string message = "default";
     if (tripped) {
-        if (Sensor::DOOR == type)
+        if (SensorType::DOOR == type)
             message = location + " is open";
-        else if (Sensor::WINDOW == type)
+        else if (SensorType::WINDOW == type)
             message = location + " is ajar";
-        else if (Sensor::MOTION == type)
+        else if (SensorType::MOTION == type)
             message = "Motion detected in " + location;
-        else if (Sensor::FIRE == type)
+        else if (SensorType::FIRE == type)
             message = location + " is on FIRE!";
     } else {
-        if (Sensor::DOOR == type)
+        if (SensorType::DOOR == type)
             message = location + " is closed";
-        else if (Sensor::WINDOW == type)
+        else if (SensorType::WINDOW == type)
             message = location + " is sealed";
-        else if (Sensor::MOTION == type)
+        else if (SensorType::MOTION == type)
             message = location + " is motionless";
-        else if (Sensor::FIRE == type)
+        else if (SensorType::FIRE == type)
             message = location + " temperature is normal";
     }
     return message;

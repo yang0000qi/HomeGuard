@@ -17,9 +17,9 @@ TEST_CASE("test find sensor by id", "[CentralUnit,unit]") {
     CentralUnit cu;
 
     SECTION("find the sensor") {
-        Sensor s1("1", "door", Sensor::Type::DOOR);
-        Sensor s2("2", "window", Sensor::Type::FIRE);
-        Sensor s3("3", "cell", Sensor::Type::WINDOW);
+        Sensor s1("1", "door", SensorType::DOOR);
+        Sensor s2("2", "window", SensorType::FIRE);
+        Sensor s3("3", "cell", SensorType::WINDOW);
         cu.registerSensor(s1);
         cu.registerSensor(s2);
         cu.registerSensor(s3);
@@ -27,12 +27,12 @@ TEST_CASE("test find sensor by id", "[CentralUnit,unit]") {
         Sensor s = cu.getSensor("1");
         CHECK(s.getID() == "1");
         CHECK(s.getLocation() == "door");
-        CHECK(s.getType() == Sensor::Type::DOOR);
+        CHECK(s.getType() == SensorType::DOOR);
 
         s = cu.getSensor("3");
         CHECK(s.getID() == "3");
         CHECK(s.getLocation() == "cell");
-        CHECK(s.getType() == Sensor::Type::WINDOW);
+        CHECK(s.getType() == SensorType::WINDOW);
     }
 
     SECTION("no sensor in CentralUnit") {
@@ -40,19 +40,25 @@ TEST_CASE("test find sensor by id", "[CentralUnit,unit]") {
 
         CHECK(s.getID() == "-1");
         CHECK(s.getLocation() == "No place");
-        CHECK(s.getType() == Sensor::Type::NONE);
+        CHECK(s.getType() == SensorType::NONE);
     }
 }
 
 TEST_CASE("test get sensor message", "[Sensor,unit]") {
-    Sensor s1("-1", "no location", Sensor::Type::NONE);
+    Sensor s1("-1", "no location", SensorType::NONE);
     CHECK(s1.getMessage() == "default");
 
-    Sensor s2("1", "door", Sensor::Type::DOOR);
+    Sensor s2("2", "door", SensorType::DOOR);
     s2.trip();
     CHECK(s2.getMessage() == "door is open");
     s2.reset();
     CHECK(s2.getMessage() == "door is closed");
+
+    Sensor s3("3", "fan", SensorType::MOTION);
+    s3.trip();
+    CHECK(s3.getMessage() == "Motion detected in fan");
+    s3.reset();
+    CHECK(s3.getMessage() == "fan is motionless");
 }
 
 TEST_CASE("run sensor test", "[Sensor,unit]") {

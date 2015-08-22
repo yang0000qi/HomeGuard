@@ -68,7 +68,7 @@ SensorList& CentralUnit::getSensors()
 
 Sensor CentralUnit::getSensor(const std::string& id) const
 {
-    Sensor result(InvalidId, "No place", Sensor::NONE);
+    Sensor result(InvalidId, "No place", SensorType::NONE);
 
     for (auto sensor : _sensors) {
         if (id == sensor.getID())
