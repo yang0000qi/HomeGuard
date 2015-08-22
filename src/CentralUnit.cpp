@@ -6,8 +6,8 @@
 
 std::string CentralUnit::PASS = "PASS";
 std::string CentralUnit::FAIL = "FAIL";
-std::string CentralUnit::PENDING = "pending";
-std::string CentralUnit::READY = "ready";
+std::string CentralUnit::PENDING = "PENDING";
+std::string CentralUnit::READY = "READY";
 
 
 CentralUnit::CentralUnit()
