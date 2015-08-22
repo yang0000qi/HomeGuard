@@ -21,7 +21,6 @@ public:
 
     CentralUnit();
 
-    std::string getSensorMessage(const Sensor& sensor) const;
     bool isArmed() const;
     void arm();
     void disarm();

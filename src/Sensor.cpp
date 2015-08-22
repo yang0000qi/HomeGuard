@@ -41,7 +41,7 @@ void Sensor::reset()
     tripped = false;
 }
 
-void Sensor::triggerByStatus(std::string status)
+void Sensor::triggerByStatus(const std::string status)
 {
     if (id != "-1") {
         if("TRIPPED" == status) {
@@ -50,4 +50,29 @@ void Sensor::triggerByStatus(std::string status)
             reset();
         }
     }
+}
+
+std::string Sensor::getMessage() const
+{
+    std::string message = "default";
+    if (tripped) {
+        if(Sensor::DOOR == type)
+            message = location + " is open";
+        else if(Sensor::WINDOW == type)
+            message = location + " is ajar";
+        else if(Sensor::MOTION == type)
+            message = "Motion detected in " + location;
+        else if(Sensor::FIRE == type)
+            message = location + " is on FIRE!";
+    } else {
+        if(Sensor::DOOR == type)
+            message = location + " is closed";
+        else if(Sensor::WINDOW == type)
+            message = location + " is sealed";
+        else if(Sensor::MOTION == type)
+            message = location + " is motionless";
+        else if(Sensor::FIRE == type)
+            message = location + " temperature is normal";
+    }
+    return message;
 }

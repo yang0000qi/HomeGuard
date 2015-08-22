@@ -19,7 +19,8 @@ public:
     bool isTripped() const;
     void trip();
     void reset();
-    void triggerByStatus(std::string status);
+    void triggerByStatus(const std::string status);
+    std::string getMessage() const;
 
 private:
     std::string id;

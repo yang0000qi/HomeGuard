@@ -32,3 +32,14 @@ TEST_CASE("test find sensor by id", "[CentralUnit,unit]") {
     CHECK(s.location == "cell");
     CHECK(s.type == Sensor::Type::WINDOW);
 }
+
+TEST_CASE("test get sensor message", "[Sensor,unit]") {
+    Sensor s1("-1", "no location", Sensor::Type::NONE);
+    CHECK(s1.getMessage() == "default");
+
+    Sensor s2("1", "door", Sensor::Type::DOOR);
+    s2.trip();
+    CHECK(s2.getMessage() == "door is open");
+    s2.reset();
+    CHECK(s2.getMessage() == "door is closed");
+}
