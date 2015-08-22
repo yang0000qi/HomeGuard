@@ -3,6 +3,8 @@
 #include <string>
 
 
+static const std::string InvalidId = "-1";
+
 class Sensor
 {
 public:

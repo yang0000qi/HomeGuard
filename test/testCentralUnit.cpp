@@ -54,3 +54,7 @@ TEST_CASE("test get sensor message", "[Sensor,unit]") {
     s2.reset();
     CHECK(s2.getMessage() == "door is closed");
 }
+
+TEST_CASE("run sensor test", "[Sensor,unit]") {
+    // TODO!!
+}

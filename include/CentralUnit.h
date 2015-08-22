@@ -38,7 +38,8 @@ public:
     std::string getSensorStatus() const;
 
 private:
-    void terminateSensorTest();
+    void _sensorTest(const std::string& id, const std::string& status);
+    void _terminateSensorTest();    
     std::tuple<std::string, std::string> _parsePacket(const std::string& packet);
 
 private:
