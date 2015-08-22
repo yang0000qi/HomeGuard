@@ -100,17 +100,32 @@ void CentralUnit::terminateSensorTest()
     }
 }
 
-void CentralUnit::parseRadioBroadcast(const std::string& packet)
+std::tuple<std::string, std::string> CentralUnit::_parsePacket(const std::string& packet)
 {
     std::string id;
     std::string status;
-
+    
     // parse the packet
     size_t splitPosition = packet.find(',');
     if (splitPosition != std::string::npos) {
         id = packet.substr(0, splitPosition);
         status = packet.substr(splitPosition + 1);
     }
+
+    return make_tuple(id, status);
+}
+
+void CentralUnit::parseRadioBroadcast(const std::string& packet)
+{
+    std::string id;
+    std::string status;
+
+    if (sensors.size() == 0) {
+        return;
+    }
+
+    // parse the packet
+    std::tie(id, status) = _parsePacket(packet);
 
     // find sensor with id
     Sensor *sensor = 0;
@@ -135,12 +150,12 @@ void CentralUnit::parseRadioBroadcast(const std::string& packet)
     view->showMessage(message);
 
     // sound the alarm if armed
-    if(isArmed()) {
+    if (isArmed()) {
         audibleAlarm->sound();
     }
 
     // check if a sensor test is running and adjust status
-    if(runningSensorTest) {
+    if (runningSensorTest) {
         if("TRIPPED" == status) {
             sensorStatusMap[id] = PASS;
         }
@@ -156,7 +171,7 @@ void CentralUnit::parseRadioBroadcast(const std::string& packet)
         }
 
         //terminate test if complete
-        if(done) {
+        if (done) {
             terminateSensorTest();
         }
     }

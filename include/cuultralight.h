@@ -1,14 +1,13 @@
-﻿
-
-#ifndef CUULIGHT
+﻿#ifndef CUULIGHT
 #define CUULIGHT
 
-#include <exception>
-#include <list>
 #include <algorithm>
-#include <iostream>
-#include <sstream>
 #include <cstring>
+#include <exception>
+#include <iostream>
+#include <list>
+#include <sstream>
+
 
 class cuu_exception : public std::exception
 {

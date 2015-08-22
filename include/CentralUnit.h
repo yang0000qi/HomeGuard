@@ -4,13 +4,13 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "AudibleAlarm.h"
 #include "HomeguardView.h"
+#include "Sensor.h"
 
-
-class Sensor;
 
 class CentralUnit {
 public:
@@ -40,6 +40,7 @@ public:
 
 private:
     void terminateSensorTest();
+    std::tuple<std::string, std::string> _parsePacket(const std::string& packet);
 
 private:
     std::string sensorTestStatus;

@@ -19,3 +19,6 @@ testHomeGuard
 GTAGS
 GRTAGS
 GPATH
+
+# OSX files
+.DS_Store

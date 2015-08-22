@@ -1,8 +1,7 @@
-﻿
-#pragma once
-
+﻿#pragma once
 
 #include <string>
+
 
 class Sensor
 {
