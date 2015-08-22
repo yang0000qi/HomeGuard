@@ -11,6 +11,9 @@
 #include "HomeguardView.h"
 #include "Sensor.h"
 
+typedef std::map<std::string, std::string> SensorStatusMap;
+typedef std::tuple<std::string, std::string> PacketTulpe;
+typedef std::vector<Sensor> SensorList;
 
 class CentralUnit {
 public:
@@ -29,26 +32,26 @@ public:
     void setSecurityCode(const std::string& code);
     void enterCode(const std::string& code);
 
-    std::vector<Sensor>& getSensors();
-    std::map<std::string,std::string>& getSensorStatusMap();
+    SensorList& getSensors();
+    SensorStatusMap& getSensorStatusMap();
     void registerSensor(const Sensor& sensor);
-    void parseRadioBroadcast(const std::string& packet);
-    void runSensorTest();
+    void onRadioBroadcast(const std::string& packet);
+    void runSensorTestPrepare();
     Sensor getSensor(const std::string& id) const;
     std::string getSensorStatus() const;
 
 private:
     void _sensorTest(const std::string& id, const std::string& status);
-    void _terminateSensorTest();    
-    std::tuple<std::string, std::string> _parsePacket(const std::string& packet);
+    void _terminateSensorTest();
+    PacketTulpe _parsePacket(const std::string& packet);
 
 private:
-    std::string sensorTestStatus;
-    bool armed;
-    std::string securityCode;
-    std::auto_ptr<AudibleAlarm> audibleAlarm;
-    std::auto_ptr<HomeguardView> view;
-    std::vector<Sensor> sensors;
-    bool runningSensorTest;
-    std::map<std::string,std::string> sensorStatusMap;
+    std::string _sensorTestStatus;
+    bool _armed;
+    std::string _securityCode;
+    std::shared_ptr<AudibleAlarm> _audibleAlarm;
+    std::shared_ptr<HomeguardView> _homeGuardView;
+    SensorList _sensors;
+    bool _runningSensorTest;
+    SensorStatusMap _sensorStatusMap;
 };

@@ -11,22 +11,22 @@ Sensor::Sensor(const std::string& id,
 {}
 
 
-std::string Sensor::getID () const
+std::string Sensor::getID() const
 {
     return id;
 }
 
-std::string Sensor::getLocation () const
+std::string Sensor::getLocation() const
 {
     return location;
 }
 
-Sensor::Type Sensor::getType () const
+Sensor::Type Sensor::getType() const
 {
     return type;
 }
 
-bool Sensor::isTripped () const
+bool Sensor::isTripped() const
 {
     return tripped;
 }
@@ -43,8 +43,8 @@ void Sensor::reset()
 
 void Sensor::triggerByStatus(const std::string status)
 {
-    if (id != "-1") {
-        if("TRIPPED" == status) {
+    if (id != InvalidId) {
+        if ("TRIPPED" == status) {
             trip();
         } else {
             reset();
@@ -52,26 +52,27 @@ void Sensor::triggerByStatus(const std::string status)
     }
 }
 
+// FIXME!!
 std::string Sensor::getMessage() const
 {
     std::string message = "default";
     if (tripped) {
-        if(Sensor::DOOR == type)
+        if (Sensor::DOOR == type)
             message = location + " is open";
-        else if(Sensor::WINDOW == type)
+        else if (Sensor::WINDOW == type)
             message = location + " is ajar";
-        else if(Sensor::MOTION == type)
+        else if (Sensor::MOTION == type)
             message = "Motion detected in " + location;
-        else if(Sensor::FIRE == type)
+        else if (Sensor::FIRE == type)
             message = location + " is on FIRE!";
     } else {
-        if(Sensor::DOOR == type)
+        if (Sensor::DOOR == type)
             message = location + " is closed";
-        else if(Sensor::WINDOW == type)
+        else if (Sensor::WINDOW == type)
             message = location + " is sealed";
-        else if(Sensor::MOTION == type)
+        else if (Sensor::MOTION == type)
             message = location + " is motionless";
-        else if(Sensor::FIRE == type)
+        else if (Sensor::FIRE == type)
             message = location + " temperature is normal";
     }
     return message;

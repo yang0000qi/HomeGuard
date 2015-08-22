@@ -11,66 +11,131 @@ std::string CentralUnit::READY = "ready";
 
 
 CentralUnit::CentralUnit()
-    : armed(false)
-    , audibleAlarm(new TextAudibleAlarm)
-    , view(new TextView)
-    , runningSensorTest(false)
+    : _armed(false)
+    , _audibleAlarm(new TextAudibleAlarm)
+    , _homeGuardView(new TextView)
+    , _runningSensorTest(false)
 {}
 
 bool CentralUnit::isArmed() const
 {
-    return armed;
+    return _armed;
 }
 
 void CentralUnit::arm()
 {
-    armed = true;
+    _armed = true;
 }
 
-std::map<std::string,std::string>& CentralUnit::getSensorStatusMap()
+void CentralUnit::disarm()
 {
-    return sensorStatusMap;
+    _armed = false;
+}
+
+SensorStatusMap& CentralUnit::getSensorStatusMap()
+{
+    return _sensorStatusMap;
+}
+
+// used during sensor test
+std::string CentralUnit::getSensorStatus() const
+{
+    return _sensorTestStatus;
 }
 
 bool CentralUnit::isValidCode(const std::string& code) const
 {
-    return code == securityCode;
+    return code == _securityCode;
 }
 
 void CentralUnit::setSecurityCode(const std::string& code)
 {
-    securityCode = code;
+    _securityCode = code;
 }
 
 void CentralUnit::enterCode(const std::string& code)
 {
-    if(isValidCode(code)) {
-        armed = false;
-        audibleAlarm->silence();
+    if (isValidCode(code)) {
+        disarm();
+        _audibleAlarm->silence();
     }
 }
 
-std::vector<Sensor>& CentralUnit::getSensors()
+SensorList& CentralUnit::getSensors()
 {
-    return sensors;
+    return _sensors;
+}
+
+Sensor CentralUnit::getSensor(const std::string& id) const
+{
+    Sensor result(InvalidId, "No place", Sensor::NONE);
+
+    for (auto sensor : _sensors) {
+        if (id == sensor.getID())
+            return sensor;
+    }
+
+    return result;
 }
 
 void CentralUnit::registerSensor(const Sensor& sensor)
 {
-    sensors.push_back(sensor);
+    _sensors.push_back(sensor);
+}
+
+void CentralUnit::onRadioBroadcast(const std::string& packet)
+{
+    std::string id;
+    std::string status;
+
+    // parse the packet
+    std::tie(id, status) = _parsePacket(packet);
+
+    // find sensor with id
+    Sensor sensor = getSensor(id);
+    if (InvalidId == sensor.getID()) {
+        return;
+    }
+
+    //trip or reset sensor
+    sensor.triggerByStatus(status);
+
+    //get the message from the sensor and display it
+    _homeGuardView->showMessage(sensor.getMessage());
+
+    // sound the alarm if armed
+    if (isArmed()) {
+        _audibleAlarm->sound();
+    }
+
+    // check if a sensor test is running and adjust status
+    _sensorTest(id, status);
+}
+
+void CentralUnit::runSensorTestPrepare()
+{
+    _runningSensorTest = true;
+    _sensorTestStatus = PENDING;
+
+    // clear the status map
+    _sensorStatusMap.clear();
+
+    for (auto sensor : _sensors) {
+        _sensorStatusMap[sensor.getID()] = PENDING;
+    }
 }
 
 // used during sensor test
 void CentralUnit::_terminateSensorTest()
 {
-    runningSensorTest = false;
+    _runningSensorTest = false;
 
     // look at individual sensor status to determine the overall test status
-    sensorTestStatus = PASS;
-    for (auto statusMap : sensorStatusMap) {
+    _sensorTestStatus = PASS;
+    for (auto statusMap : _sensorStatusMap) {
         std::string status = statusMap.second;
         if (status == PENDING) {
-            sensorTestStatus = FAIL;
+            _sensorTestStatus = FAIL;
             break;
         }
     }
@@ -78,14 +143,14 @@ void CentralUnit::_terminateSensorTest()
 
 void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
 {
-    if (runningSensorTest) {
+    if (_runningSensorTest) {
         if ("TRIPPED" == status) {
-            sensorStatusMap[id] = PASS;
+            _sensorStatusMap[id] = PASS;
         }
 
         // check to see if test is complete
         bool done = true;
-        for (auto statusMap : sensorStatusMap) {
+        for (auto statusMap : _sensorStatusMap) {
             std::string testStatus = statusMap.second;
             if (PENDING == testStatus) {
                 done = false;
@@ -100,7 +165,7 @@ void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
     }
 }
 
-std::tuple<std::string, std::string> CentralUnit::_parsePacket(const std::string& packet)
+PacketTulpe CentralUnit::_parsePacket(const std::string& packet)
 {
     std::string id;
     std::string status;
@@ -113,64 +178,4 @@ std::tuple<std::string, std::string> CentralUnit::_parsePacket(const std::string
     }
 
     return make_tuple(id, status);
-}
-
-void CentralUnit::parseRadioBroadcast(const std::string& packet)
-{
-    std::string id;
-    std::string status;
-
-    // parse the packet
-    std::tie(id, status) = _parsePacket(packet);
-
-    // find sensor with id
-    Sensor sensor = getSensor(id);
-    if (sensor.getID() == InvalidId) {
-        return;
-    }
-
-    //trip or reset sensor
-    sensor.triggerByStatus(status);
-
-    //get the message from the sensor and display it
-    view->showMessage(sensor.getMessage());
-
-    // sound the alarm if armed
-    if (isArmed()) {
-        audibleAlarm->sound();
-    }
-
-    // check if a sensor test is running and adjust status
-    _sensorTest(id, status);
-}
-
-void CentralUnit::runSensorTest()
-{
-    runningSensorTest = true;
-    sensorTestStatus = PENDING;
-
-    // clear the status map
-    sensorStatusMap.clear();
-
-    for(std::vector<Sensor>::iterator it = sensors.begin(); it != sensors.end(); ++it) {
-        sensorStatusMap[it->getID()] = PENDING;
-    }
-}
-
-Sensor CentralUnit::getSensor(const std::string& id) const
-{
-    Sensor result(InvalidId, "No place", Sensor::NONE);
-
-    for (auto sensor : sensors) {
-        if (id == sensor.getID())
-            return sensor;
-    }
-
-    return result;
-}
-
-// used during sensor test
-std::string CentralUnit::getSensorStatus() const
-{
-    return sensorTestStatus;
 }
