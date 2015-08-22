@@ -6,23 +6,24 @@
 class Sensor
 {
 public:
-	enum Type { DOOR, WINDOW, MOTION, FIRE, NONE };
+    enum Type { DOOR, WINDOW, MOTION, FIRE, NONE };
 
-	Sensor(const std::string& id, 
-			const std::string& location, 
-			Type type);
+    Sensor(const std::string& id,
+           const std::string& location,
+           Type type);
 
-	std::string getID () const;
-	std::string getLocation() const;
-	Type getType() const;
+    std::string getID () const;
+    std::string getLocation() const;
+    Type getType() const;
 
-	bool isTripped() const;
-	void trip();
-	void reset();
+    bool isTripped() const;
+    void trip();
+    void reset();
+    void triggerByStatus(std::string status);
 
 private:
-	std::string id;
-	std::string location;
-	Type type;
-	bool tripped;
+    std::string id;
+    std::string location;
+    Type type;
+    bool tripped;
 };

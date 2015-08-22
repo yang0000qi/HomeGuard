@@ -1,43 +1,53 @@
-﻿
-#include "Sensor.h"
+﻿#include "Sensor.h"
 
-	
-Sensor::Sensor(const std::string& id, 
-			   const std::string& location, 
-			   Type type)
-: id(id), location(location), type(type), tripped(false)
-{
-}
+
+Sensor::Sensor(const std::string& id,
+               const std::string& location,
+               Type type)
+    : id(id)
+    , location(location)
+    , type(type)
+    , tripped(false)
+{}
 
 
 std::string Sensor::getID () const
 {
-	return id;
+    return id;
 }
 
 std::string Sensor::getLocation () const
 {
-	return location;
+    return location;
 }
 
 Sensor::Type Sensor::getType () const
 {
-	return type;
+    return type;
 }
 
 bool Sensor::isTripped () const
 {
-	return tripped;
+    return tripped;
 }
 
-void Sensor::trip() 
+void Sensor::trip()
 {
-	tripped = true;
+    tripped = true;
 }
 
 void Sensor::reset()
 {
-	tripped = false;
+    tripped = false;
 }
 
-
+void Sensor::triggerByStatus(std::string status)
+{
+    if (id != "-1") {
+        if("TRIPPED" == status) {
+            trip();
+        } else {
+            reset();
+        }
+    }
+}

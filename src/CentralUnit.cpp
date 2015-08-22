@@ -47,7 +47,8 @@ std::string CentralUnit::getSensorMessage(const Sensor& sensor) const
     } else {
         if(sensor.getType() == Sensor::DOOR)
             return sensor.getLocation() + " is open";
-        else if(sensor.getType() == Sensor::WINDOW)         return sensor.getLocation() + " is ajar";
+        else if(sensor.getType() == Sensor::WINDOW)
+            return sensor.getLocation() + " is ajar";
         else if(sensor.getType() == Sensor::MOTION)
             return "Motion detected in " + sensor.getLocation();
         else if(sensor.getType() == Sensor::FIRE)
@@ -129,15 +130,12 @@ void CentralUnit::parseRadioBroadcast(const std::string& packet)
 
     // find sensor with id
     Sensor sensor = getSensor(id);
+    if (sensor.getID() == "-1") {
+        return;
+    }
 
     //trip or reset sensor
-    if (sensor.getID() != "-1") {
-        if("TRIPPED" == status) {
-            sensor.trip();
-        } else {
-            sensor.reset();
-        }
-    }
+    sensor.triggerByStatus(status);
 
     //get the message from the sensor and display it
     std::string message = getSensorMessage(sensor);
