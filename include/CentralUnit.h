@@ -34,12 +34,13 @@ public:
 
     void registerSensor(const Sensor& sensor);
     void onRadioBroadcast(const std::string& packet);
-    void runSensorTestPrepare();
+    void runSensorTest();
 
 private:
     void _sensorTest(const std::string& id, const std::string& status);
     void _terminateSensorTest();
     PacketTulpe _parsePacket(const std::string& packet);
+    bool _sensorTestDone();
 
 private:
     std::string _sensorTestStatus;

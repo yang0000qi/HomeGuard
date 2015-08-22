@@ -106,7 +106,7 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     _sensorTest(id, status);
 }
 
-void CentralUnit::runSensorTestPrepare()
+void CentralUnit::runSensorTest()
 {
     _runningSensorTest = true;
     _sensorTestStatus = SensorStatus::PENDING;
@@ -135,6 +135,17 @@ void CentralUnit::_terminateSensorTest()
     }
 }
 
+bool CentralUnit::_sensorTestDone()
+{
+    for (auto statusMap : _sensorStatusMap) {
+        std::string testStatus = statusMap.second;
+        if (SensorStatus::PENDING == testStatus) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
 {
     if (_runningSensorTest) {
@@ -142,18 +153,8 @@ void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
             _sensorStatusMap[id] = SensorStatus::PASS;
         }
 
-        // check to see if test is complete
-        bool done = true;
-        for (auto statusMap : _sensorStatusMap) {
-            std::string testStatus = statusMap.second;
-            if (SensorStatus::PENDING == testStatus) {
-                done = false;
-                break;
-            }
-        }
-
         //terminate test if complete
-        if (done) {
+        if (_sensorTestDone()) {
             _terminateSensorTest();
         }
     }

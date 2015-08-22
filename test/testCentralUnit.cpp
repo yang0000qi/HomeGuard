@@ -67,7 +67,7 @@ TEST_CASE("run sensor test", "[Sensor,unit]") {
     Sensor s2("2", "window", SensorType::WINDOW);
 
     cu.registerSensor(s1);
-    cu.runSensorTestPrepare();
+    cu.runSensorTest();
     cu.onRadioBroadcast("1,NOT_TRIPPED");
     CHECK(cu.getSensorStatus() == SensorStatus::PENDING);
     cu.onRadioBroadcast("1,TRIPPED");
@@ -75,7 +75,7 @@ TEST_CASE("run sensor test", "[Sensor,unit]") {
 
     s1.reset();
     cu.registerSensor(s2);
-    cu.runSensorTestPrepare();
+    cu.runSensorTest();
     cu.onRadioBroadcast("1,NOT_TRIPPED");
     cu.onRadioBroadcast("2,NOT_TRIPPED");
     CHECK(cu.getSensorStatus() == SensorStatus::PENDING);
