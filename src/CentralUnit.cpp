@@ -96,10 +96,6 @@ void CentralUnit::parseRadioBroadcast(const std::string& packet)
     std::string id;
     std::string status;
 
-    if (sensors.size() == 0) {
-        return;
-    }
-
     // parse the packet
     std::tie(id, status) = _parsePacket(packet);
 
@@ -113,8 +109,7 @@ void CentralUnit::parseRadioBroadcast(const std::string& packet)
     sensor.triggerByStatus(status);
 
     //get the message from the sensor and display it
-    std::string message = sensor.getMessage();
-    view->showMessage(message);
+    view->showMessage(sensor.getMessage());
 
     // sound the alarm if armed
     if (isArmed()) {
