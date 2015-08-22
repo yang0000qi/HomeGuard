@@ -1,8 +1,8 @@
 ﻿#include "Sensor.h"
 
 
-#define MESSAGE_MAP(type, tripped, normal) \
-    _messageMap[(type)] = {[&]() { return (tripped); },\
+#define MESSAGE_MAP(type, tripped, normal)              \
+    _messageMap[(type)] = {[&]() { return (tripped); }, \
                            [&]() { return (normal); }}
 
 Sensor::Sensor(const std::string& id,
