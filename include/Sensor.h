@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <functional>
 #include <map>
 #include <string>
 
@@ -7,8 +8,8 @@
 static const std::string InvalidId = "-1";
 
 struct SensorMessage {
-    std::function<std::string(std::string)> tripped;
-    std::function<std::string(std::string)> normal;
+    std::function<std::string()> tripped;
+    std::function<std::string()> normal;
 };
 
 enum class SensorType {
@@ -34,8 +35,12 @@ public:
     std::string getMessage() const;
 
 private:
+    void _initSensorMessageMap();
+
+private:
     std::string _id;
     std::string _location;
     SensorType _type;
     bool _tripped;
+    SensorMessageMap _messageMap;
 };

@@ -8,8 +8,32 @@ Sensor::Sensor(const std::string& id,
     , _location(location)
     , _type(type)
     , _tripped(false)
-{}
+{
+    _initSensorMessageMap();
+}
 
+void Sensor::_initSensorMessageMap()
+{
+    _messageMap[SensorType::DOOR] =
+        {[&]() { return _location + " is open"; },
+         [&]() { return _location + " is closed"; }};
+
+    _messageMap[SensorType::WINDOW] = {
+        [&]() { return _location + " is ajar";  },
+        [&]() { return _location + " is sealed"; }};
+
+    _messageMap[SensorType::MOTION] = {
+        [&]() { return "Motion detected in " + _location; },
+        [&]() { return _location + " is motionless";}};
+
+    _messageMap[SensorType::FIRE] = {
+        [&]() {return _location + " is on FIRE!"; },
+        [&]() {return _location + " temperature is normal"; }};
+
+    _messageMap[SensorType::NONE] = {
+        [&]() { return "default"; },
+        [&]() { return "default"; }};
+}
 
 std::string Sensor::getID() const
 {
@@ -52,28 +76,8 @@ void Sensor::triggerByStatus(const std::string status)
     }
 }
 
-// FIXME!!
 std::string Sensor::getMessage() const
 {
-    std::string message = "default";
-    if (isTripped()) {
-        if (SensorType::DOOR == _type)
-            message = _location + " is open";
-        else if (SensorType::WINDOW == _type)
-            message = _location + " is ajar";
-        else if (SensorType::MOTION == _type)
-            message = "Motion detected in " + _location;
-        else if (SensorType::FIRE == _type)
-            message = _location + " is on FIRE!";
-    } else {
-        if (SensorType::DOOR == _type)
-            message = _location + " is closed";
-        else if (SensorType::WINDOW == _type)
-            message = _location + " is sealed";
-        else if (SensorType::MOTION == _type)
-            message = _location + " is motionless";
-        else if (SensorType::FIRE == _type)
-            message = _location + " temperature is normal";
-    }
-    return message;
+    auto message = _messageMap.at(_type);
+    return isTripped() ? message.tripped() : message.normal();
 }
