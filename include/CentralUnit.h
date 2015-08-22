@@ -17,11 +17,6 @@ typedef std::vector<Sensor> SensorList;
 
 class CentralUnit {
 public:
-    static std::string PASS;
-    static std::string FAIL;
-    static std::string PENDING;
-    static std::string READY;
-
     CentralUnit();
 
     bool isArmed() const;

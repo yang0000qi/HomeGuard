@@ -4,12 +4,6 @@
 #include "TextView.h"
 
 
-std::string CentralUnit::PASS = "PASS";
-std::string CentralUnit::FAIL = "FAIL";
-std::string CentralUnit::PENDING = "PENDING";
-std::string CentralUnit::READY = "READY";
-
-
 CentralUnit::CentralUnit()
     : _armed(false)
     , _audibleAlarm(new TextAudibleAlarm)
@@ -115,13 +109,13 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
 void CentralUnit::runSensorTestPrepare()
 {
     _runningSensorTest = true;
-    _sensorTestStatus = PENDING;
+    _sensorTestStatus = SensorStatus::PENDING;
 
     // clear the status map
     _sensorStatusMap.clear();
 
     for (auto sensor : _sensors) {
-        _sensorStatusMap[sensor.getID()] = PENDING;
+        _sensorStatusMap[sensor.getID()] = SensorStatus::PENDING;
     }
 }
 
@@ -131,11 +125,11 @@ void CentralUnit::_terminateSensorTest()
     _runningSensorTest = false;
 
     // look at individual sensor status to determine the overall test status
-    _sensorTestStatus = PASS;
+    _sensorTestStatus = SensorStatus::PASS;
     for (auto statusMap : _sensorStatusMap) {
         std::string status = statusMap.second;
-        if (status == PENDING) {
-            _sensorTestStatus = FAIL;
+        if (status == SensorStatus::PENDING) {
+            _sensorTestStatus = SensorStatus::FAIL;
             break;
         }
     }
@@ -145,14 +139,14 @@ void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
 {
     if (_runningSensorTest) {
         if ("TRIPPED" == status) {
-            _sensorStatusMap[id] = PASS;
+            _sensorStatusMap[id] = SensorStatus::PASS;
         }
 
         // check to see if test is complete
         bool done = true;
         for (auto statusMap : _sensorStatusMap) {
             std::string testStatus = statusMap.second;
-            if (PENDING == testStatus) {
+            if (SensorStatus::PENDING == testStatus) {
                 done = false;
                 break;
             }

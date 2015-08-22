@@ -18,6 +18,13 @@ enum class SensorType {
 
 typedef std::map<SensorType, SensorMessage> SensorMessageMap;
 
+struct SensorStatus {
+    static const std::string PASS;
+    static const std::string FAIL;
+    static const std::string PENDING;
+    static const std::string READY;
+};
+
 class Sensor {
 public:
     Sensor(const std::string& id,
