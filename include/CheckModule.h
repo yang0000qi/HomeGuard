@@ -9,10 +9,19 @@
 class CheckModule {
 public:
     void runSensorTest();
-    void setSensorManager(std::shared_ptr<SensorManager> manager);
-    std::shared_ptr<SensorManager> sensorManager();
     void check(const std::string& id, const std::string& status);
-    std::string status() const;
+
+    std::string status() const {
+        return _sensorTestStatus;
+    }
+
+    void setSensorManager(std::shared_ptr<SensorManager> manager) {
+        _sensorManager = manager;
+    }
+
+    std::shared_ptr<SensorManager> sensorManager() {
+        return _sensorManager;
+    }
 
 private:
     void _terminateSensorTest();
@@ -21,6 +30,6 @@ private:
 private:
     std::string _sensorTestStatus = SensorStatus::PENDING;
     bool _runningSensorTest = false;
-    
-    std::shared_ptr<SensorManager> _sensorManager;    
+
+    std::shared_ptr<SensorManager> _sensorManager;
 };

@@ -6,16 +6,6 @@ void SensorManager::registerSensor(const Sensor& sensor)
     _sensors.push_back(sensor);
 }
 
-SensorStatusMap& SensorManager::sensorStatusMap()
-{
-    return _sensorStatusMap;
-}
-
-SensorList& SensorManager::sensors()
-{
-    return _sensors;
-}
-
 Sensor SensorManager::getSensor(const std::string& id) const
 {
     Sensor none(InvalidId, "No place", SensorType::NONE);

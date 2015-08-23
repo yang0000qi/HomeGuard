@@ -32,26 +32,6 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     checkModule()->check(id, status);
 }
 
-std::shared_ptr<SensorManager> CentralUnit::sensorManager()
-{
-    return _sensorManager;
-}
-
-std::shared_ptr<CheckModule> CentralUnit::checkModule()
-{
-    return _checkModule;
-}
-
-std::shared_ptr<SecurityPanel> CentralUnit::securityPanel()
-{
-    return _securityPanel;
-}
-
-std::shared_ptr<HomeGuardView> CentralUnit::homeGuardView()
-{
-    return _homeGuardView;
-}
-
 PacketTulpe CentralUnit::_parsePacket(const std::string& packet)
 {
     std::string id;

@@ -11,12 +11,13 @@ typedef std::vector<Sensor> SensorList;
 
 class SensorManager {
 public:
-    void registerSensor(const Sensor& sensor);
-    SensorList& sensors();
     Sensor getSensor(const std::string& id) const;
-    SensorStatusMap& sensorStatusMap();
+    void registerSensor(const Sensor& sensor);
     void clearStatusMap();
     void setStatus(const std::string id, const std::string status);
+
+    SensorList& sensors() { return _sensors; }
+    SensorStatusMap& sensorStatusMap() { return _sensorStatusMap; }
 
 private:
     SensorList _sensors;

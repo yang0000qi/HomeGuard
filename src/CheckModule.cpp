@@ -51,18 +51,3 @@ bool CheckModule::_sensorTestDone()
     }
     return true;
 }
-
-void CheckModule::setSensorManager(std::shared_ptr<SensorManager> manager)
-{
-    _sensorManager = manager;
-}
-
-std::shared_ptr<SensorManager> CheckModule::sensorManager()
-{
-    return _sensorManager;
-}
-
-std::string CheckModule::status() const
-{
-    return _sensorTestStatus;
-}

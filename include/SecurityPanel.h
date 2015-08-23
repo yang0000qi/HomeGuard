@@ -10,19 +10,24 @@ class SecurityPanel {
 public:
     SecurityPanel();
 
-    bool isArmed() const;
-    void arm();
-    void disarm();
-
-    bool isValidCode(const std::string& code) const;
-    void setSecurityCode(const std::string& code);
     void enterCode(const std::string& code);
-
     void alarm();
     void silence();
+
+    bool isArmed() const { return _armed; }
+    void arm() { _armed = true; }
+    void disarm() { _armed = false; }
+
+    bool isValidCode(const std::string& code) const {
+        return code == _securityCode;
+    }
+
+    void setSecurityCode(const std::string& code) {
+        _securityCode = code;
+    }
+
 private:
     bool _armed;
     std::shared_ptr<AudibleAlarm> _audibleAlarm;
-    std::string _securityCode;    
+    std::string _securityCode;
 };
-
