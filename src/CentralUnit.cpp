@@ -27,8 +27,6 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     }
 
     sensor.triggerByStatus(status);
-
-    //get the message from the sensor and display it
     homeGuardView()->showMessage(sensor.getMessage());
     securityPanel()->alarm();
     checkModule()->check(id, status);
@@ -59,7 +57,6 @@ PacketTulpe CentralUnit::_parsePacket(const std::string& packet)
     std::string id;
     std::string status;
 
-    // parse the packet
     size_t splitPosition = packet.find(',');
     if (splitPosition != std::string::npos) {
         id = packet.substr(0, splitPosition);

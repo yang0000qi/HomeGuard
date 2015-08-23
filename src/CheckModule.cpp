@@ -6,7 +6,6 @@ void CheckModule::runSensorTest()
     _runningSensorTest = true;
     _sensorTestStatus = SensorStatus::PENDING;
 
-    // clear the status map
     sensorManager()->clearStatusMap();
 
     for (auto sensor : sensorManager()->sensors()) {
@@ -21,7 +20,6 @@ void CheckModule::check(const std::string& id, const std::string& status)
             sensorManager()->setStatus(id, SensorStatus::PASS);
         }
 
-        //terminate test if complete
         if (_sensorTestDone()) {
             _terminateSensorTest();
         }
