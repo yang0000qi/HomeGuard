@@ -1,5 +1,6 @@
-﻿#include "CentralUnit.h"
-#include "Sensor.h"
+﻿#include <algorithm>
+
+#include "CentralUnit.h"
 #include "TextAudibleAlarm.h"
 #include "TextView.h"
 
@@ -8,6 +9,7 @@ CentralUnit::CentralUnit()
     : _armed(false)
     , _audibleAlarm(new TextAudibleAlarm)
     , _homeGuardView(new TextView)
+    , _sensorManager(new SensorManager)
     , _runningSensorTest(false)
 {}
 
@@ -24,11 +26,6 @@ void CentralUnit::arm()
 void CentralUnit::disarm()
 {
     _armed = false;
-}
-
-SensorStatusMap& CentralUnit::getSensorStatusMap()
-{
-    return _sensorStatusMap;
 }
 
 // used during sensor test
@@ -55,26 +52,9 @@ void CentralUnit::enterCode(const std::string& code)
     }
 }
 
-SensorList& CentralUnit::getSensors()
+std::shared_ptr<SensorManager> CentralUnit::sensorManager()
 {
-    return _sensors;
-}
-
-Sensor CentralUnit::getSensor(const std::string& id) const
-{
-    Sensor result(InvalidId, "No place", SensorType::NONE);
-
-    for (auto sensor : _sensors) {
-        if (id == sensor.getID())
-            return sensor;
-    }
-
-    return result;
-}
-
-void CentralUnit::registerSensor(const Sensor& sensor)
-{
-    _sensors.push_back(sensor);
+    return _sensorManager;
 }
 
 void CentralUnit::onRadioBroadcast(const std::string& packet)
@@ -86,7 +66,7 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     std::tie(id, status) = _parsePacket(packet);
 
     // find sensor with id
-    Sensor sensor = getSensor(id);
+    Sensor sensor = _sensorManager->getSensor(id);
     if (InvalidId == sensor.getID()) {
         return;
     }
@@ -112,10 +92,24 @@ void CentralUnit::runSensorTest()
     _sensorTestStatus = SensorStatus::PENDING;
 
     // clear the status map
-    _sensorStatusMap.clear();
+    _sensorManager->clearStatusMap();
 
-    for (auto sensor : _sensors) {
-        _sensorStatusMap[sensor.getID()] = SensorStatus::PENDING;
+    for (auto sensor : _sensorManager->sensors()) {
+        _sensorManager->setStatus(sensor.getID(), SensorStatus::PENDING);
+    }
+}
+
+void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
+{
+    if (_runningSensorTest) {
+        if (SensorStatus::TRIPPED == status) {
+            _sensorManager->setStatus(id, SensorStatus::PASS);
+        }
+
+        //terminate test if complete
+        if (_sensorTestDone()) {
+            _terminateSensorTest();
+        }
     }
 }
 
@@ -126,7 +120,7 @@ void CentralUnit::_terminateSensorTest()
 
     // look at individual sensor status to determine the overall test status
     _sensorTestStatus = SensorStatus::PASS;
-    for (auto statusMap : _sensorStatusMap) {
+    for (auto statusMap : _sensorManager->sensorStatusMap()) {
         std::string status = statusMap.second;
         if (SensorStatus::PENDING == status) {
             _sensorTestStatus = SensorStatus::FAIL;
@@ -137,27 +131,13 @@ void CentralUnit::_terminateSensorTest()
 
 bool CentralUnit::_sensorTestDone()
 {
-    for (auto statusMap : _sensorStatusMap) {
+    for (auto statusMap : _sensorManager->sensorStatusMap()) {
         std::string testStatus = statusMap.second;
         if (SensorStatus::PENDING == testStatus) {
             return false;
         }
     }
     return true;
-}
-
-void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
-{
-    if (_runningSensorTest) {
-        if (SensorStatus::TRIPPED == status) {
-            _sensorStatusMap[id] = SensorStatus::PASS;
-        }
-
-        //terminate test if complete
-        if (_sensorTestDone()) {
-            _terminateSensorTest();
-        }
-    }
 }
 
 PacketTulpe CentralUnit::_parsePacket(const std::string& packet)

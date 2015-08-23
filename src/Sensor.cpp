@@ -7,10 +7,6 @@ const std::string SensorStatus::PENDING = "PENDING";
 const std::string SensorStatus::READY   = "READY";
 const std::string SensorStatus::TRIPPED = "TRIPPED";
 
-#define MESSAGE_MAP(type, tripped, normal)              \
-    _messageMap[(type)] = {[&]() { return (tripped); }, \
-                           [&]() { return (normal); }}
-
 Sensor::Sensor(const std::string& id,
                const std::string& location,
                SensorType type)
@@ -21,6 +17,10 @@ Sensor::Sensor(const std::string& id,
 {
     _initSensorMessageMap();
 }
+
+#define MESSAGE_MAP(type, tripped, normal)              \
+    _messageMap[(type)] = {[&]() { return (tripped); }, \
+                           [&]() { return (normal); }}
 
 void Sensor::_initSensorMessageMap()
 {
@@ -78,11 +78,7 @@ void Sensor::reset()
 void Sensor::triggerByStatus(const std::string status)
 {
     if (getID() != InvalidId) {
-        if (SensorStatus::TRIPPED == status) {
-            trip();
-        } else {
-            reset();
-        }
+        SensorStatus::TRIPPED == status ? trip() : reset();
     }
 }
 

@@ -9,11 +9,10 @@
 #include "AudibleAlarm.h"
 #include "HomeguardView.h"
 #include "Sensor.h"
+#include "SensorManager.h"
 
 
-typedef std::map<std::string, std::string> SensorStatusMap;
 typedef std::tuple<std::string, std::string> PacketTulpe;
-typedef std::vector<Sensor> SensorList;
 
 class CentralUnit {
 public:
@@ -27,12 +26,8 @@ public:
     void setSecurityCode(const std::string& code);
     void enterCode(const std::string& code);
 
-    SensorStatusMap& getSensorStatusMap();
-    SensorList& getSensors();
-    Sensor getSensor(const std::string& id) const;
+    std::shared_ptr<SensorManager> sensorManager();
     std::string getSensorStatus() const;
-
-    void registerSensor(const Sensor& sensor);
     void onRadioBroadcast(const std::string& packet);
     void runSensorTest();
 
@@ -48,7 +43,7 @@ private:
     std::string _securityCode;
     std::shared_ptr<AudibleAlarm> _audibleAlarm;
     std::shared_ptr<HomeguardView> _homeGuardView;
-    SensorList _sensors;
+    std::shared_ptr<SensorManager> _sensorManager;
     bool _runningSensorTest;
-    SensorStatusMap _sensorStatusMap;
+    /* SensorStatusMap _sensorStatusMap; */
 };
