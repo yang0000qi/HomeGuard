@@ -9,6 +9,7 @@ CentralUnit::CentralUnit()
     : _homeGuardView(new TextView)
     , _sensorManager(new SensorManager)
     , _checkModule(new CheckModule)
+    , _securityPanel(new SecurityPanel)
 {
     _checkModule->setSensorManager(_sensorManager);
 }
@@ -23,7 +24,7 @@ std::shared_ptr<CheckModule> CentralUnit::checkModule()
     return _checkModule;
 }
 
-SecurityPanel& CentralUnit::securityPanel()
+std::shared_ptr<SecurityPanel> CentralUnit::securityPanel()
 {
     return _securityPanel;
 }
@@ -49,7 +50,7 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     _homeGuardView->showMessage(sensor.getMessage());
 
     // sound the alarm if armed
-    securityPanel().alarm();
+    securityPanel()->alarm();
 
     // check if a sensor test is running and adjust status
     checkModule()->check(id, status);

@@ -21,7 +21,7 @@ public:
 
     std::shared_ptr<SensorManager> sensorManager();
     std::shared_ptr<CheckModule> checkModule();
-    SecurityPanel& securityPanel();
+    std::shared_ptr<SecurityPanel> securityPanel();
     void onRadioBroadcast(const std::string& packet);
 
 private:
@@ -31,7 +31,5 @@ private:
     std::shared_ptr<HomeguardView> _homeGuardView;
     std::shared_ptr<SensorManager> _sensorManager;
     std::shared_ptr<CheckModule> _checkModule;
-
-    SecurityPanel _securityPanel;
-    std::string _sensorTestStatus;
+    std::shared_ptr<SecurityPanel> _securityPanel;
 };
