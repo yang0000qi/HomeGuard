@@ -68,21 +68,21 @@ TEST_CASE("run sensor test", "[Sensor,unit]") {
     Sensor s2("2", "window", SensorType::WINDOW);
 
     cu.sensorManager()->registerSensor(s1);
-    cu.runSensorTest();
+    cu.checkModule()->runSensorTest();
     cu.onRadioBroadcast("1,NOT_TRIPPED");
-    CHECK(cu.getSensorStatus() == SensorStatus::PENDING);
+    CHECK(cu.checkModule()->status() == SensorStatus::PENDING);
     cu.onRadioBroadcast("1,TRIPPED");
-    CHECK(cu.getSensorStatus() == SensorStatus::PASS);
+    CHECK(cu.checkModule()->status() == SensorStatus::PASS);
 
     s1.reset();
     cu.sensorManager()->registerSensor(s2);
-    cu.runSensorTest();
+    cu.checkModule()->runSensorTest();
     cu.onRadioBroadcast("1,NOT_TRIPPED");
     cu.onRadioBroadcast("2,NOT_TRIPPED");
-    CHECK(cu.getSensorStatus() == SensorStatus::PENDING);
+    CHECK(cu.checkModule()->status() == SensorStatus::PENDING);
     cu.onRadioBroadcast("1,TRIPPED");
     cu.onRadioBroadcast("2,TRIPPED");
-    CHECK(cu.getSensorStatus() == SensorStatus::PASS);
+    CHECK(cu.checkModule()->status() == SensorStatus::PASS);
 }
 
 // TODO: check securityPanel

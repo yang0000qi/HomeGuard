@@ -20,23 +20,18 @@ public:
     CentralUnit();
 
     std::shared_ptr<SensorManager> sensorManager();
+    std::shared_ptr<CheckModule> checkModule();
     SecurityPanel& securityPanel();
-    std::string getSensorStatus() const;
     void onRadioBroadcast(const std::string& packet);
-    void runSensorTest();
 
 private:
-    void _sensorTest(const std::string& id, const std::string& status);
-    void _terminateSensorTest();
     PacketTulpe _parsePacket(const std::string& packet);
-    bool _sensorTestDone();
 
 private:
     std::shared_ptr<HomeguardView> _homeGuardView;
     std::shared_ptr<SensorManager> _sensorManager;
-    bool _runningSensorTest;
+    std::shared_ptr<CheckModule> _checkModule;
 
     SecurityPanel _securityPanel;
-    CheckModule _checkModule;
     std::string _sensorTestStatus;
 };

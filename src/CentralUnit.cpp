@@ -8,20 +8,19 @@
 CentralUnit::CentralUnit()
     : _homeGuardView(new TextView)
     , _sensorManager(new SensorManager)
-    , _runningSensorTest(false)
+    , _checkModule(new CheckModule)
 {
-    _checkModule.setSensorManager(_sensorManager);
-}
-
-// used during sensor test
-std::string CentralUnit::getSensorStatus() const
-{
-    return _sensorTestStatus;
+    _checkModule->setSensorManager(_sensorManager);
 }
 
 std::shared_ptr<SensorManager> CentralUnit::sensorManager()
 {
     return _sensorManager;
+}
+
+std::shared_ptr<CheckModule> CentralUnit::checkModule()
+{
+    return _checkModule;
 }
 
 SecurityPanel& CentralUnit::securityPanel()
@@ -53,61 +52,7 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     securityPanel().alarm();
 
     // check if a sensor test is running and adjust status
-    _sensorTest(id, status);
-}
-
-void CentralUnit::runSensorTest()
-{
-    _runningSensorTest = true;
-    _sensorTestStatus = SensorStatus::PENDING;
-
-    // clear the status map
-    sensorManager()->clearStatusMap();
-
-    for (auto sensor : sensorManager()->sensors()) {
-        sensorManager()->setStatus(sensor.getID(), SensorStatus::PENDING);
-    }
-}
-
-void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
-{
-    if (_runningSensorTest) {
-        if (SensorStatus::TRIPPED == status) {
-            sensorManager()->setStatus(id, SensorStatus::PASS);
-        }
-
-        //terminate test if complete
-        if (_sensorTestDone()) {
-            _terminateSensorTest();
-        }
-    }
-}
-
-// used during sensor test
-void CentralUnit::_terminateSensorTest()
-{
-    _runningSensorTest = false;
-
-    // look at individual sensor status to determine the overall test status
-    _sensorTestStatus = SensorStatus::PASS;
-    for (auto statusMap : sensorManager()->sensorStatusMap()) {
-        std::string status = statusMap.second;
-        if (SensorStatus::PENDING == status) {
-            _sensorTestStatus = SensorStatus::FAIL;
-            break;
-        }
-    }
-}
-
-bool CentralUnit::_sensorTestDone()
-{
-    for (auto statusMap : sensorManager()->sensorStatusMap()) {
-        std::string testStatus = statusMap.second;
-        if (SensorStatus::PENDING == testStatus) {
-            return false;
-        }
-    }
-    return true;
+    checkModule()->check(id, status);
 }
 
 PacketTulpe CentralUnit::_parsePacket(const std::string& packet)
