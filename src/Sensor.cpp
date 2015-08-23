@@ -13,16 +13,15 @@ Sensor::Sensor(const std::string& id,
     : _id(id)
     , _location(location)
     , _type(type)
-    , _tripped(false)
 {
-    _initSensorMessageMap();
+    _initSensorMessage();
 }
 
 #define MESSAGE_MAP(type, tripped, normal)              \
     _messageMap[(type)] = {[&]() { return (tripped); }, \
                            [&]() { return (normal); }}
 
-void Sensor::_initSensorMessageMap()
+void Sensor::_initSensorMessage()
 {
     MESSAGE_MAP(SensorType::DOOR,
                 _location + " is open",
@@ -48,7 +47,7 @@ void Sensor::triggerByStatus(const std::string status)
     }
 }
 
-std::string Sensor::getMessage() const
+std::string Sensor::message() const
 {
     auto message = _messageMap.at(getType());
     return isTripped() ? message.tripped() : message.normal();

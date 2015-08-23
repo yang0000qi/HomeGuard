@@ -32,23 +32,24 @@ public:
            const std::string& location,
            SensorType type);
 
+    void triggerByStatus(const std::string status);
+    std::string message() const;
+
     std::string getID () const { return _id; }
     std::string getLocation() const { return _location; }
     SensorType getType() const { return _type; }
-
     bool isTripped() const { return _tripped; }
     void trip() { _tripped = true; }
     void reset() { _tripped = false; }
-    void triggerByStatus(const std::string status);
-    std::string getMessage() const;
 
 private:
-    void _initSensorMessageMap();
+    void _initSensorMessage();
 
 private:
     std::string _id;
     std::string _location;
     SensorType _type;
-    bool _tripped;
+
     SensorMessageMap _messageMap;
+    bool _tripped = false;
 };

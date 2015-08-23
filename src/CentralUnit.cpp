@@ -1,7 +1,4 @@
-﻿#include <algorithm>
-
-#include "CentralUnit.h"
-#include "TextAudibleAlarm.h"
+﻿#include "CentralUnit.h"
 #include "TextView.h"
 
 
@@ -27,7 +24,7 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     }
 
     sensor.triggerByStatus(status);
-    homeGuardView()->showMessage(sensor.getMessage());
+    homeGuardView()->showMessage(sensor.message());
     securityPanel()->alarm();
     checkModule()->check(id, status);
 }

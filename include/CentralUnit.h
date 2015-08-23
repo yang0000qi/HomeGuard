@@ -20,21 +20,10 @@ public:
     CentralUnit();
     void onRadioBroadcast(const std::string& packet);
 
-    std::shared_ptr<SensorManager> sensorManager() {
-        return _sensorManager;
-    }
-
-    std::shared_ptr<CheckModule> checkModule() {
-        return _checkModule;
-    }
-
-    std::shared_ptr<SecurityPanel> securityPanel() {
-        return _securityPanel;
-    }
-
-    std::shared_ptr<HomeGuardView> homeGuardView() {
-        return _homeGuardView;
-    }
+    std::shared_ptr<SensorManager> sensorManager() { return _sensorManager; }
+    std::shared_ptr<CheckModule> checkModule() { return _checkModule; }
+    std::shared_ptr<SecurityPanel> securityPanel() { return _securityPanel; }
+    std::shared_ptr<HomeGuardView> homeGuardView() { return _homeGuardView; }
 
 private:
     PacketTulpe _parsePacket(const std::string& packet);

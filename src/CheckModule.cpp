@@ -26,6 +26,17 @@ void CheckModule::check(const std::string& id, const std::string& status)
     }
 }
 
+bool CheckModule::_sensorTestDone()
+{
+    for (auto statusMap : sensorManager()->sensorStatusMap()) {
+        std::string testStatus = statusMap.second;
+        if (SensorStatus::PENDING == testStatus) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void CheckModule::_terminateSensorTest()
 {
     _runningSensorTest = false;
@@ -39,15 +50,4 @@ void CheckModule::_terminateSensorTest()
             break;
         }
     }
-}
-
-bool CheckModule::_sensorTestDone()
-{
-    for (auto statusMap : sensorManager()->sensorStatusMap()) {
-        std::string testStatus = statusMap.second;
-        if (SensorStatus::PENDING == testStatus) {
-            return false;
-        }
-    }
-    return true;
 }
