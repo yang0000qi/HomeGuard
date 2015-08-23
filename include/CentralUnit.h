@@ -18,11 +18,12 @@ typedef std::tuple<std::string, std::string> PacketTulpe;
 class CentralUnit {
 public:
     CentralUnit();
+    void onRadioBroadcast(const std::string& packet);
 
     std::shared_ptr<SensorManager> sensorManager();
     std::shared_ptr<CheckModule> checkModule();
     std::shared_ptr<SecurityPanel> securityPanel();
-    void onRadioBroadcast(const std::string& packet);
+    std::shared_ptr<HomeGuardView> homeGuardView();
 
 private:
     PacketTulpe _parsePacket(const std::string& packet);

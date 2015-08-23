@@ -14,6 +14,26 @@ CentralUnit::CentralUnit()
     _checkModule->setSensorManager(_sensorManager);
 }
 
+void CentralUnit::onRadioBroadcast(const std::string& packet)
+{
+    std::string id;
+    std::string status;
+
+    std::tie(id, status) = _parsePacket(packet);
+
+    Sensor sensor = sensorManager()->getSensor(id);
+    if (InvalidId == sensor.getID()) {
+        return;
+    }
+
+    sensor.triggerByStatus(status);
+
+    //get the message from the sensor and display it
+    homeGuardView()->showMessage(sensor.getMessage());
+    securityPanel()->alarm();
+    checkModule()->check(id, status);
+}
+
 std::shared_ptr<SensorManager> CentralUnit::sensorManager()
 {
     return _sensorManager;
@@ -29,31 +49,9 @@ std::shared_ptr<SecurityPanel> CentralUnit::securityPanel()
     return _securityPanel;
 }
 
-void CentralUnit::onRadioBroadcast(const std::string& packet)
+std::shared_ptr<HomeGuardView> CentralUnit::homeGuardView()
 {
-    std::string id;
-    std::string status;
-
-    // parse the packet
-    std::tie(id, status) = _parsePacket(packet);
-
-    // find sensor with id
-    Sensor sensor = sensorManager()->getSensor(id);
-    if (InvalidId == sensor.getID()) {
-        return;
-    }
-
-    //trip or reset sensor
-    sensor.triggerByStatus(status);
-
-    //get the message from the sensor and display it
-    _homeGuardView->showMessage(sensor.getMessage());
-
-    // sound the alarm if armed
-    securityPanel()->alarm();
-
-    // check if a sensor test is running and adjust status
-    checkModule()->check(id, status);
+    return _homeGuardView;
 }
 
 PacketTulpe CentralUnit::_parsePacket(const std::string& packet)
