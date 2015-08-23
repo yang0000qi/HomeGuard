@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "CheckModule.h"
-#include "HomeguardView.h"
+#include "HomeGuardView.h"
 #include "Sensor.h"
 #include "SensorManager.h"
 #include "SecurityPanel.h"
@@ -28,7 +28,7 @@ private:
     PacketTulpe _parsePacket(const std::string& packet);
 
 private:
-    std::shared_ptr<HomeguardView> _homeGuardView;
+    std::shared_ptr<HomeGuardView> _homeGuardView;
     std::shared_ptr<SensorManager> _sensorManager;
     std::shared_ptr<CheckModule> _checkModule;
     std::shared_ptr<SecurityPanel> _securityPanel;

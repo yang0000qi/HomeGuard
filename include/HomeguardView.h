@@ -3,7 +3,7 @@
 #include <string>
 
 
-class HomeguardView
+class HomeGuardView
 {
 public:
 	virtual void showMessage(const std::string& message) = 0;

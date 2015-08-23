@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "HomeguardView.h"
+#include "HomeGuardView.h"
 
 
-class TextView : public HomeguardView
+class TextView : public HomeGuardView
 {
 public:
 	virtual void showMessage(const std::string& message);
