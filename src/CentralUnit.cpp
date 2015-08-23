@@ -6,26 +6,9 @@
 
 
 CentralUnit::CentralUnit()
-    : _armed(false)
-    , _audibleAlarm(new TextAudibleAlarm)
-    , _homeGuardView(new TextView)
+    : _homeGuardView(new TextView)
     , _runningSensorTest(false)
 {}
-
-bool CentralUnit::isArmed() const
-{
-    return _armed;
-}
-
-void CentralUnit::arm()
-{
-    _armed = true;
-}
-
-void CentralUnit::disarm()
-{
-    _armed = false;
-}
 
 // used during sensor test
 std::string CentralUnit::getSensorStatus() const
@@ -33,27 +16,14 @@ std::string CentralUnit::getSensorStatus() const
     return _sensorTestStatus;
 }
 
-bool CentralUnit::isValidCode(const std::string& code) const
-{
-    return code == _securityCode;
-}
-
-void CentralUnit::setSecurityCode(const std::string& code)
-{
-    _securityCode = code;
-}
-
-void CentralUnit::enterCode(const std::string& code)
-{
-    if (isValidCode(code)) {
-        disarm();
-        _audibleAlarm->silence();
-    }
-}
-
 SensorManager& CentralUnit::sensorManager()
 {
     return _sensorManager;
+}
+
+SecurityPanel& CentralUnit::securityPanel()
+{
+    return _securityPanel;
 }
 
 void CentralUnit::onRadioBroadcast(const std::string& packet)
@@ -77,9 +47,7 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     _homeGuardView->showMessage(sensor.getMessage());
 
     // sound the alarm if armed
-    if (isArmed()) {
-        _audibleAlarm->sound();
-    }
+    securityPanel().alarm();
 
     // check if a sensor test is running and adjust status
     _sensorTest(id, status);

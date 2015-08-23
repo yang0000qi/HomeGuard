@@ -6,10 +6,10 @@
 #include <tuple>
 #include <vector>
 
-#include "AudibleAlarm.h"
 #include "HomeguardView.h"
 #include "Sensor.h"
 #include "SensorManager.h"
+#include "SecurityPanel.h"
 
 
 typedef std::tuple<std::string, std::string> PacketTulpe;
@@ -18,15 +18,8 @@ class CentralUnit {
 public:
     CentralUnit();
 
-    bool isArmed() const;
-    void arm();
-    void disarm();
-
-    bool isValidCode(const std::string& code) const;
-    void setSecurityCode(const std::string& code);
-    void enterCode(const std::string& code);
-
     SensorManager& sensorManager();
+    SecurityPanel& securityPanel();
     std::string getSensorStatus() const;
     void onRadioBroadcast(const std::string& packet);
     void runSensorTest();
@@ -38,12 +31,10 @@ private:
     bool _sensorTestDone();
 
 private:
-    bool _armed;
-    std::shared_ptr<AudibleAlarm> _audibleAlarm;
     std::shared_ptr<HomeguardView> _homeGuardView;
     bool _runningSensorTest;
 
     std::string _sensorTestStatus;
-    std::string _securityCode;
     SensorManager _sensorManager;
+    SecurityPanel _securityPanel;
 };
