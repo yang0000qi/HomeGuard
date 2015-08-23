@@ -13,9 +13,7 @@ CentralUnit::CentralUnit()
 
 void CentralUnit::onRadioBroadcast(const std::string& packet)
 {
-    std::string id;
-    std::string status;
-
+    std::string id, status;
     std::tie(id, status) = _parsePacket(packet);
 
     Sensor sensor = sensorManager()->getSensor(id);
