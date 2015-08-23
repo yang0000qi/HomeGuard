@@ -15,7 +15,7 @@ Sensor SensorManager::getSensor(const std::string& id) const
             return sensor;
     }
 
-    return none;    
+    return none;
 }
 
 void SensorManager::clearStatusMap()

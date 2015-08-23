@@ -5,5 +5,5 @@
 
 void TextView::showMessage(const std::string& message)
 {
-	std::cout << message << std::endl;
+    std::cout << message << std::endl;
 }

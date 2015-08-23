@@ -5,6 +5,6 @@ void TextAudibleAlarm::sound()
 {
 }
 
-void TextAudibleAlarm::silence() 
+void TextAudibleAlarm::silence()
 {
 }

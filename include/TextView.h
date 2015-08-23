@@ -6,5 +6,5 @@
 class TextView : public HomeGuardView
 {
 public:
-	virtual void showMessage(const std::string& message);
+    virtual void showMessage(const std::string& message);
 };
