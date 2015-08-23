@@ -6,6 +6,7 @@
 #include <tuple>
 #include <vector>
 
+#include "CheckModule.h"
 #include "HomeguardView.h"
 #include "Sensor.h"
 #include "SensorManager.h"
@@ -18,7 +19,7 @@ class CentralUnit {
 public:
     CentralUnit();
 
-    SensorManager& sensorManager();
+    std::shared_ptr<SensorManager> sensorManager();
     SecurityPanel& securityPanel();
     std::string getSensorStatus() const;
     void onRadioBroadcast(const std::string& packet);
@@ -32,9 +33,10 @@ private:
 
 private:
     std::shared_ptr<HomeguardView> _homeGuardView;
+    std::shared_ptr<SensorManager> _sensorManager;
     bool _runningSensorTest;
 
-    std::string _sensorTestStatus;
-    SensorManager _sensorManager;
     SecurityPanel _securityPanel;
+    CheckModule _checkModule;
+    std::string _sensorTestStatus;
 };
