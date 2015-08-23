@@ -26,7 +26,7 @@ public:
     void setSecurityCode(const std::string& code);
     void enterCode(const std::string& code);
 
-    std::shared_ptr<SensorManager> sensorManager();
+    SensorManager& sensorManager();
     std::string getSensorStatus() const;
     void onRadioBroadcast(const std::string& packet);
     void runSensorTest();
@@ -38,12 +38,12 @@ private:
     bool _sensorTestDone();
 
 private:
-    std::string _sensorTestStatus;
     bool _armed;
-    std::string _securityCode;
     std::shared_ptr<AudibleAlarm> _audibleAlarm;
     std::shared_ptr<HomeguardView> _homeGuardView;
-    std::shared_ptr<SensorManager> _sensorManager;
     bool _runningSensorTest;
-    /* SensorStatusMap _sensorStatusMap; */
+
+    std::string _sensorTestStatus;
+    std::string _securityCode;
+    SensorManager _sensorManager;
 };

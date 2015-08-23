@@ -2,6 +2,7 @@
 #define private public
 #include "CentralUnit.h"
 
+
 TEST_CASE("test parse packet", "[CentralUnit,unit]") {
     CentralUnit cu;
 
@@ -20,23 +21,23 @@ TEST_CASE("test find sensor by id", "[CentralUnit,unit]") {
         Sensor s1("1", "door", SensorType::DOOR);
         Sensor s2("2", "window", SensorType::FIRE);
         Sensor s3("3", "cell", SensorType::WINDOW);
-        cu.sensorManager()->registerSensor(s1);
-        cu.sensorManager()->registerSensor(s2);
-        cu.sensorManager()->registerSensor(s3);
+        cu.sensorManager().registerSensor(s1);
+        cu.sensorManager().registerSensor(s2);
+        cu.sensorManager().registerSensor(s3);
 
-        Sensor s = cu.sensorManager()->getSensor("1");
+        Sensor s = cu.sensorManager().getSensor("1");
         CHECK(s.getID() == "1");
         CHECK(s.getLocation() == "door");
         CHECK(s.getType() == SensorType::DOOR);
 
-        s = cu.sensorManager()->getSensor("3");
+        s = cu.sensorManager().getSensor("3");
         CHECK(s.getID() == "3");
         CHECK(s.getLocation() == "cell");
         CHECK(s.getType() == SensorType::WINDOW);
     }
 
     SECTION("no sensor in CentralUnit") {
-        Sensor s = cu.sensorManager()->getSensor("1");
+        Sensor s = cu.sensorManager().getSensor("1");
 
         CHECK(s.getID() == "-1");
         CHECK(s.getLocation() == "No place");
@@ -66,7 +67,7 @@ TEST_CASE("run sensor test", "[Sensor,unit]") {
     Sensor s1("1", "door", SensorType::DOOR);
     Sensor s2("2", "window", SensorType::WINDOW);
 
-    cu.sensorManager()->registerSensor(s1);
+    cu.sensorManager().registerSensor(s1);
     cu.runSensorTest();
     cu.onRadioBroadcast("1,NOT_TRIPPED");
     CHECK(cu.getSensorStatus() == SensorStatus::PENDING);
@@ -74,7 +75,7 @@ TEST_CASE("run sensor test", "[Sensor,unit]") {
     CHECK(cu.getSensorStatus() == SensorStatus::PASS);
 
     s1.reset();
-    cu.sensorManager()->registerSensor(s2);
+    cu.sensorManager().registerSensor(s2);
     cu.runSensorTest();
     cu.onRadioBroadcast("1,NOT_TRIPPED");
     cu.onRadioBroadcast("2,NOT_TRIPPED");

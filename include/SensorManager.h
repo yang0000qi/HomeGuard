@@ -9,7 +9,6 @@
 typedef std::map<std::string, std::string> SensorStatusMap;
 typedef std::vector<Sensor> SensorList;
 
-
 class SensorManager {
 public:
     void registerSensor(const Sensor& sensor);

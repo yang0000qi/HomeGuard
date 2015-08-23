@@ -9,7 +9,6 @@ CentralUnit::CentralUnit()
     : _armed(false)
     , _audibleAlarm(new TextAudibleAlarm)
     , _homeGuardView(new TextView)
-    , _sensorManager(new SensorManager)
     , _runningSensorTest(false)
 {}
 
@@ -52,7 +51,7 @@ void CentralUnit::enterCode(const std::string& code)
     }
 }
 
-std::shared_ptr<SensorManager> CentralUnit::sensorManager()
+SensorManager& CentralUnit::sensorManager()
 {
     return _sensorManager;
 }
@@ -66,7 +65,7 @@ void CentralUnit::onRadioBroadcast(const std::string& packet)
     std::tie(id, status) = _parsePacket(packet);
 
     // find sensor with id
-    Sensor sensor = _sensorManager->getSensor(id);
+    Sensor sensor = _sensorManager.getSensor(id);
     if (InvalidId == sensor.getID()) {
         return;
     }
@@ -92,10 +91,10 @@ void CentralUnit::runSensorTest()
     _sensorTestStatus = SensorStatus::PENDING;
 
     // clear the status map
-    _sensorManager->clearStatusMap();
+    _sensorManager.clearStatusMap();
 
-    for (auto sensor : _sensorManager->sensors()) {
-        _sensorManager->setStatus(sensor.getID(), SensorStatus::PENDING);
+    for (auto sensor : _sensorManager.sensors()) {
+        _sensorManager.setStatus(sensor.getID(), SensorStatus::PENDING);
     }
 }
 
@@ -103,7 +102,7 @@ void CentralUnit::_sensorTest(const std::string& id, const std::string& status)
 {
     if (_runningSensorTest) {
         if (SensorStatus::TRIPPED == status) {
-            _sensorManager->setStatus(id, SensorStatus::PASS);
+            _sensorManager.setStatus(id, SensorStatus::PASS);
         }
 
         //terminate test if complete
@@ -120,7 +119,7 @@ void CentralUnit::_terminateSensorTest()
 
     // look at individual sensor status to determine the overall test status
     _sensorTestStatus = SensorStatus::PASS;
-    for (auto statusMap : _sensorManager->sensorStatusMap()) {
+    for (auto statusMap : _sensorManager.sensorStatusMap()) {
         std::string status = statusMap.second;
         if (SensorStatus::PENDING == status) {
             _sensorTestStatus = SensorStatus::FAIL;
@@ -131,7 +130,7 @@ void CentralUnit::_terminateSensorTest()
 
 bool CentralUnit::_sensorTestDone()
 {
-    for (auto statusMap : _sensorManager->sensorStatusMap()) {
+    for (auto statusMap : _sensorManager.sensorStatusMap()) {
         std::string testStatus = statusMap.second;
         if (SensorStatus::PENDING == testStatus) {
             return false;
