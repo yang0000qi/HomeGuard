@@ -9,6 +9,8 @@
 重构后的代码主要分为3个文件夹:include,src,test并包含Makefile,可以
 在OSX和Linux上进行编译和运行:
 
+*注意* 重构时使用了C++11标准,请使用支持C++11的编译器进行构建运行.
+
     > make       # 构建
     > make test  # 运行测试用例
 

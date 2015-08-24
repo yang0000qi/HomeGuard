@@ -9,7 +9,7 @@ void CheckModule::runSensorTest()
     sensorManager()->clearStatusMap();
 
     for (auto sensor : sensorManager()->sensors()) {
-        sensorManager()->setStatus(sensor.getID(), SensorStatus::PENDING);
+        sensorManager()->setStatus(sensor.id(), SensorStatus::PENDING);
     }
 }
 

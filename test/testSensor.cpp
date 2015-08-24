@@ -1,10 +1,10 @@
 #include "catch.hpp"
 #define private public
-#include "CentralUnit.h"
+#include "Sensor.h"
 
 
 TEST_CASE("test get sensor message", "[Sensor,unit]") {
-    Sensor s1("-1", "no location", SensorType::NONE);
+    Sensor s1(InvalidId, "no location", SensorType::NONE);
     CHECK(s1.message() == "default");
 
     Sensor s2("2", "door", SensorType::DOOR);

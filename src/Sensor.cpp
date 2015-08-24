@@ -42,13 +42,13 @@ void Sensor::_initSensorMessage()
 
 void Sensor::triggerByStatus(const std::string status)
 {
-    if (getID() != InvalidId) {
+    if (id() != InvalidId) {
         SensorStatus::TRIPPED == status ? trip() : reset();
     }
 }
 
 std::string Sensor::message() const
 {
-    auto message = _messageMap.at(getType());
+    auto message = _messageMap.at(type());
     return isTripped() ? message.tripped() : message.normal();
 }

@@ -35,9 +35,9 @@ public:
     void triggerByStatus(const std::string status);
     std::string message() const;
 
-    std::string getID () const { return _id; }
-    std::string getLocation() const { return _location; }
-    SensorType getType() const { return _type; }
+    std::string id() const { return _id; }
+    std::string location() const { return _location; }
+    SensorType type() const { return _type; }
     bool isTripped() const { return _tripped; }
     void trip() { _tripped = true; }
     void reset() { _tripped = false; }

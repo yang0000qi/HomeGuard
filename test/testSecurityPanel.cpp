@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #define private public
-#include "CentralUnit.h"
+#include "SecurityPanel.h"
 
 
 TEST_CASE("test security panel", "[SecurityPanel,unit]") {
@@ -10,6 +10,8 @@ TEST_CASE("test security panel", "[SecurityPanel,unit]") {
     CHECK(sp.isValidCode("this is correct password") == true);
 
     sp.arm();
+    CHECK(sp.isArmed() == true);
+    sp.enterCode("this is not correct password");
     CHECK(sp.isArmed() == true);
     sp.enterCode("this is correct password");
     CHECK(sp.isArmed() == false);

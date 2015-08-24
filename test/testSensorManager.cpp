@@ -15,21 +15,21 @@ TEST_CASE("test find sensor by id", "[SensorManager,unit]") {
         cu.sensorManager()->registerSensor(s3);
 
         Sensor s = cu.sensorManager()->getSensor("1");
-        CHECK(s.getID() == "1");
-        CHECK(s.getLocation() == "door");
-        CHECK(s.getType() == SensorType::DOOR);
+        CHECK(s.id() == "1");
+        CHECK(s.location() == "door");
+        CHECK(s.type() == SensorType::DOOR);
 
         s = cu.sensorManager()->getSensor("3");
-        CHECK(s.getID() == "3");
-        CHECK(s.getLocation() == "cell");
-        CHECK(s.getType() == SensorType::WINDOW);
+        CHECK(s.id() == "3");
+        CHECK(s.location() == "cell");
+        CHECK(s.type() == SensorType::WINDOW);
     }
 
     SECTION("no sensor in CentralUnit") {
         Sensor s = cu.sensorManager()->getSensor("1");
 
-        CHECK(s.getID() == "-1");
-        CHECK(s.getLocation() == "No place");
-        CHECK(s.getType() == SensorType::NONE);
+        CHECK(s.id() == InvalidId);
+        CHECK(s.location() == "No place");
+        CHECK(s.type() == SensorType::NONE);
     }
 }

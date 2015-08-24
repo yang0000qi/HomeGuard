@@ -11,7 +11,7 @@ Sensor SensorManager::getSensor(const std::string& id) const
     Sensor none(InvalidId, "No place", SensorType::NONE);
 
     for (auto sensor : _sensors) {
-        if (id == sensor.getID())
+        if (id == sensor.id())
             return sensor;
     }
 
