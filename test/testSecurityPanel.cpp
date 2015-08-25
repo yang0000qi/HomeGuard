@@ -6,9 +6,9 @@
 
 TEST_CASE("test security panel", "[SecurityPanel,unit]") {
     SecurityPanel sp;
-    sp._audibleAlarm.reset((AudibleAlarm *)(new MockAudibleAlarm));
+    sp._audibleAlarm.reset(dynamic_cast<AudibleAlarm *>(new MockAudibleAlarm));
     std::shared_ptr<MockAudibleAlarm> mockAlarm =
-        std::static_pointer_cast<MockAudibleAlarm>(sp._audibleAlarm);
+        std::dynamic_pointer_cast<MockAudibleAlarm>(sp._audibleAlarm);
     sp.setSecurityCode("this is correct password");
     CHECK(sp.isValidCode("this is not correct password") == false);
     CHECK(sp.isValidCode("this is correct password") == true);
