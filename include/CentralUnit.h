@@ -23,9 +23,6 @@ public:
     std::shared_ptr<HomeGuardView> homeGuardView() { return _homeGuardView; }
 
 private:
-    PacketTulpe _parsePacket(const std::string& packet);
-
-private:
     std::shared_ptr<HomeGuardView> _homeGuardView;
     std::shared_ptr<SensorManager> _sensorManager;
     std::shared_ptr<CheckModule> _checkModule;
