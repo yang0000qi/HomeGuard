@@ -1,5 +1,6 @@
 #include "Packets.h"
 
+
 PacketTulpe Packets::parse(const std::string& packet)
 {
     std::string id;

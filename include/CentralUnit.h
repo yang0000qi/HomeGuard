@@ -2,8 +2,6 @@
 
 #include <map>
 #include <memory>
-#include <string>
-#include <tuple>
 #include <vector>
 
 #include "CheckModule.h"
@@ -11,9 +9,8 @@
 #include "Sensor.h"
 #include "SensorManager.h"
 #include "SecurityPanel.h"
+#include "Packets.h"
 
-
-typedef std::tuple<std::string, std::string> PacketTulpe;
 
 class CentralUnit {
 public:
